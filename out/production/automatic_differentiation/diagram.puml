@@ -1,0 +1,118 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+
+
+interface Expression {
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Constant {
+    - value : double
+    + Constant (double)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class X {
+    +X ()
+    +evaluate (DualNumber) : DualNumber
+}
+
+
+class Sin {
+    - expr : Expression
+    + Sin (Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+abstract class BinaryOperator {
+    # left : Expression
+    # right : Expression
+    BinaryOperator (Expression, Expression)
+}
+
+class Cos {
+    - expr : Expression
+    + Cos (Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Pow {
+    -expr : Expression
+    - k : int
+    Pow (Expression, int)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Log {
+    - expr : Expression
+    + Log (Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class DualNumber {
+    + u : double
+    + uprime : double
+    + DualNumber (double, double)
+    + toString () : String
+}
+
+class Main {
+    - {static} f (double) : double
+    - {static} df (double) : double
+    + {static} main (String[] args)
+}
+
+class Add {
+    + Add (Expression, Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Subtract {
+    + Subtract (Expression, Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Multiply {
+    + Multiply (Expression, Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+class Divide {
+    + Divide (Expression, Expression)
+    + evaluate (DualNumber) : DualNumber
+}
+
+Constant .up-|> Expression
+X .up-|> Expression
+BinaryOperator .up-|> Expression
+Sin .up-|> Expression
+Cos .up-|> Expression
+Pow .up-|> Expression
+Log .up-|> Expression
+
+BinaryOperator o-up> Expression : left, right "2"
+Sin o-up> Expression : expr "1"
+Cos o-up> Expression : expr "1"
+Pow o-up> Expression : expr "1"
+Log o-up> Expression : expr "1"
+
+BinaryOperator -[hidden]left-> Constant
+BinaryOperator -[hidden]left-> X
+BinaryOperator -[hidden]right-> Sin
+BinaryOperator -[hidden]right-> Cos
+
+Pow -[hidden]left-> Cos
+Log -[hidden]left-> Sin
+
+Add --up|> BinaryOperator
+Subtract --up|>BinaryOperator
+Multiply --up|>BinaryOperator
+Divide --up|>BinaryOperator
+
+DualNumber --[hidden]up> Add
+Main --[hidden]up> Subtract
+DualNumber --[hidden]right>Main
+
+
+@enduml
